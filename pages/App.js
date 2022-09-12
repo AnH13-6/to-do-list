@@ -1,5 +1,8 @@
 import React, { useState } from "react";
 import { nanoid } from "nanoid";
+import { EditText } from "react-edit-text";
+import "react-edit-text/dist/index.css";
+import GlobalStyle from "./GlobalStyle";
 
 export default function List() {
   const [todoItems, setTodoItems] = useState([
@@ -28,6 +31,7 @@ export default function List() {
       id: nanoid(),
       text: inputElement.value,
     };
+    inputElement.value = "";
 
     const newListArray = [...todoItems, newListItem];
     setTodoItems(newListArray);
@@ -46,31 +50,35 @@ export default function List() {
 
   return (
     <>
+      <GlobalStyle />
       <h1>Todo-List</h1>
-      <form onSubmit={addItem}>
-        <input
-          type="text"
-          id="newItem"
-          name="newItem"
-          placeholder="todo hinzufügen"
-        ></input>
-        <button type="submit">Hinzufügen</button>
-      </form>
-      <ul style={{ listStyle: "none" }}>
-        {todoItems.map((item) => (
-          <li key="{item.id}">
-            <input type="checkbox" />
-            {item.text}{" "}
-            <button
-              onClick={() => {
-                deleteItem(item.id);
-              }}
-            >
-              X
-            </button>
-          </li>
-        ))}
-      </ul>
+      <main>
+        <form onSubmit={addItem}>
+          <input
+            type="text"
+            id="newItem"
+            name="newItem"
+            placeholder="todo hinzufügen"
+            required
+          ></input>
+          <button type="submit">Hinzufügen</button>
+        </form>
+        <ul style={{ listStyle: "none" }}>
+          {todoItems.map((item) => (
+            <li key="{item.id}" style={{ width: "350px" }}>
+              <input type="checkbox" />
+              <EditText defaultValue={item.text} showEditButton />
+              <button
+                onClick={() => {
+                  deleteItem(item.id);
+                }}
+              >
+                Löschen
+              </button>
+            </li>
+          ))}
+        </ul>
+      </main>
     </>
   );
 }
